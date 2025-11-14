@@ -25,11 +25,11 @@ const APP_TITLE = import.meta.env.VITE_APP_TITLE || 'Расписание';
 
 const tg = (typeof window !== 'undefined' ? (window as any).Telegram?.WebApp : undefined);
 
-const toIsoZ = (date: string, endOfDay = false) => {
-  const [y, m, d] = date.split('-').map(Number);
-  const dt = new Date(Date.UTC(y, m - 1, d, endOfDay ? 23 : 0, endOfDay ? 59 : 0, endOfDay ? 59 : 0, endOfDay ? 999 : 0));
-  return dt.toISOString();
+// формат для бэка: "YYYY-MM-DD HH:MM:SS"
+const formatDateForBackend = (date: string, endOfDay = false) => {
+  return `${date} ${endOfDay ? '23:59:59' : '00:00:00'}`;
 };
+
 const timeRange = (from: string, to: string) => `${from.slice(0,5)}–${to.slice(0,5)}`;
 const subjectClass = (t: string) => {
   const s = t.toLowerCase();
@@ -149,8 +149,8 @@ export default function App() {
         body: JSON.stringify({
           full_university_name: form.full_university_name.trim(),
           group_name: form.group_name.trim(),
-          dt_from: toIsoZ(form.date_from, false),
-          dt_to: toIsoZ(form.date_to, true)
+          dt_from: formatDateForBackend(form.date_from, false),
+          dt_to: formatDateForBackend(form.date_to, true)
         })
       });
       if (!res.ok) {
