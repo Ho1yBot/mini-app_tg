@@ -169,8 +169,8 @@ export default function App() {
     }
   }, [form]);
 
-  // const insideTelegram = Boolean(tg);
-  const insideTelegram = false;
+  const insideTelegram = Boolean(tg);
+  // const insideTelegram = false;
 
   return (
     <div className="app">
